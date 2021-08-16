@@ -1,7 +1,7 @@
 var amqp = require('amqplib/callback_api');
 //const opt = { credentials: require('amqplib').credentials.plain('guest', 'guest') };
 
-amqp.connect('amqp://snow:snowpass@206.189.130.135:5672/',function(error1,connection){
+amqp.connect('',function(error1,connection){
     if (error1) {
         throw error1;
     }
