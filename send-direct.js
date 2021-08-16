@@ -1,30 +1,32 @@
 var amqp = require('amqplib/callback_api');
-const opt = { credentials: require('amqplib').credentials.plain('guest', 'guest') };
+//const opt = { credentials: require('amqplib').credentials.plain('guest', 'guest') };
 
 amqp.connect('amqp://snow:snowpass@206.189.130.135:5672/',function(error1,connection){
-  if (error1) {
+    if (error1) {
         throw error1;
-      }
+    }
        connection.createChannel(function(error1, channel) {
           if (error1) {
             throw error1;
           }
           var exchange = 'direct_logs';
+          var exchange_type = 'direct';
           var msg = process.argv.slice(2).join(' ') || 'Hello 5';
+          var queue = 'test';
 
-          channel.assertExchange(exchange, 'direct', {
-            durable: false
+          channel.assertExchange(exchange, exchange_type, {
+            durable: false // if true queue will be active when server restart
           });
-          channel.publish(exchange, 'test', Buffer.from(msg));
-          console.log(" [x] Sent %s", msg);
-          var queue = 'task_queue';
-            channel.assertQueue(queue, {
-              durable: true
-            });
 
-          channel.sendToQueue(queue, Buffer.from(msg), {
+          //channel.publish(exchange, queue, Buffer.from(msg));
+          //console.log(" [x] Sent %s", msg);
+
+           channel.sendToQueue(queue, Buffer.from(msg), {
             persistent: true
           });
+
+
+
 
 
 
